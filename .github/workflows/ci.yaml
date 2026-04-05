@@ -132,10 +132,6 @@ jobs:
           git switch main
           git pull origin main
 
-          echo "Deleting compose applications..."
-          docker compose -p mlh-pe-app-1 down
-          docker compose -p mlh-pe-app-2 down
-
           echo "Deploying to applications..."
           HOST_PORT=8081 docker compose -p mlh-pe-app-1 up -d --build --force-recreate
           HOST_PORT=8082 docker compose -p mlh-pe-app-2 up -d --build --force-recreate
@@ -156,10 +152,6 @@ jobs:
           git stash
           git switch main
           git pull origin main
-
-          echo "Deleting compose applications..."
-          docker compose -p mlh-pe-app-1 down
-          docker compose -p mlh-pe-app-2 down
 
           echo "Deploying to applications..."
           HOST_PORT=8081 docker compose -p mlh-pe-app-1 up -d --build --force-recreate
