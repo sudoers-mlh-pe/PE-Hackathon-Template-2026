@@ -77,8 +77,18 @@ cp .env.example .env   # edit if your DB credentials differ
 uv run run.py
 
 # 6. Verify
-curl http://localhost:5000/health
+curl http://localhost:5001/health
 # → {"status":"ok"}
+```
+
+You can also access the dockerized application using the following commands:
+
+```bash
+# 1. Run docker compose
+docker compose up -d
+
+# 2. access health check
+curl http://localhost:8081/health
 ```
 
 ## Project Structure
