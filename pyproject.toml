@@ -7,5 +7,16 @@ dependencies = [
     "flask>=3.1",
     "peewee>=3.17",
     "psycopg2-binary>=2.9",
+    "pytest>=9.0.2",
+    "pytest-cov>=7.1.0",
     "python-dotenv>=1.0",
+    "upstash-redis>=1.7.0",
+    "validators>=0.35.0",
 ]
+[tool.pytest.ini_options]
+# This tells pytest where to look for your code
+pythonpath = ["."]
+# This tells pytest where your tests live
+testpaths = ["app/tests"]
+# This ensures pytest finds files named test_*.py
+python_files = ["test_*.py"]

@@ -5,4 +5,7 @@ def register_routes(app):
         from app.routes.products import products_bp
         app.register_blueprint(products_bp)
     """
-    pass
+    from app.routes.shorten import shorten_bp
+    from app.routes.redirect import redirect_bp
+    app.register_blueprint(shorten_bp)
+    app.register_blueprint(redirect_bp)
