@@ -44,6 +44,20 @@ docker compose --env-file ../.env up -d
 
 It has `adminer` for postgres GUI. You can check it out at http://localhost:8080
 
+## Adminer basics
+
+Adminer is a lightweight database management tool that runs in your browser. It provides an easy interface to interact with your PostgreSQL database.
+
+The credentials for this one are:
+
+```bash
+System: PostgreSQL
+Server: db
+Username: your-env-db-username
+Password: your-env-db-password
+Database: your-env-db-databse
+```
+
 ## Quick Start
 
 ```bash
@@ -63,8 +77,18 @@ cp .env.example .env   # edit if your DB credentials differ
 uv run run.py
 
 # 6. Verify
-curl http://localhost:5000/health
+curl http://localhost:5001/health
 # → {"status":"ok"}
+```
+
+You can also access the dockerized application using the following commands:
+
+```bash
+# 1. Run docker compose
+HOST_PORT=8081 docker compose -p mlh-pe-app-1 up -d  --build --force-recreate
+
+# 2. access health check
+curl http://localhost:8081/health
 ```
 
 ## Project Structure
