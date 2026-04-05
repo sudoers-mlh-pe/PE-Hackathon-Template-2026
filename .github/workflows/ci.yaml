@@ -103,7 +103,7 @@ jobs:
         run: uv sync --locked --all-extras --dev
 
       - name: Run tests
-        run: uv run pytest
+        run: uv run pytest --cov-report=term-missing --cov-fail-under=50
 
   deploy:
     name: Deploy
@@ -118,5 +118,5 @@ jobs:
       - name: Deploy
         run: |
           echo "Deploying to server..."
-          git pull origin main
-          docker-compose up -d --build
+          HOST_PORT=8081 docker compose -p mlh-pe-app-1 up -d --build --force-recreate
+          HOST_PORT=8082 docker compose -p mlh-pe-app-2 up -d --build --force-recreate
