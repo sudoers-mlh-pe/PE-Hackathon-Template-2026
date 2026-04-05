@@ -6,6 +6,7 @@ on:
       - main
       - staging
       - develop
+      - ci
 
 jobs:
   trivy:
@@ -102,7 +103,20 @@ jobs:
         run: uv sync --locked --all-extras --dev
 
       - name: Run tests
-        run: uv run pytest -x 
+        run: uv run pytest -x
 
+    deploy:
+      name: Deploy
+      runs-on: self-hosted
+      needs: trivy
+      if: github.ref == 'refs/heads/main' && success()
 
+      steps:
+        - name: Checkout code
+          uses: actions/checkout@v6
 
+        - name: Deploy
+          run: |
+            echo "Deploying to server..."
+            git pull origin main
+            docker-compose up -d --build
