@@ -85,7 +85,7 @@ You can also access the dockerized application using the following commands:
 
 ```bash
 # 1. Run docker compose
-HOST_PORT=8081 docker compose -p mlh-pe-app-1 up -d
+HOST_PORT=8081 docker compose -p mlh-pe-app-1 up -d  --build --force-recreate
 
 # 2. access health check
 curl http://localhost:8081/health
