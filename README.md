@@ -44,6 +44,20 @@ docker compose --env-file ../.env up -d
 
 It has `adminer` for postgres GUI. You can check it out at http://localhost:8080
 
+## Adminer basics
+
+Adminer is a lightweight database management tool that runs in your browser. It provides an easy interface to interact with your PostgreSQL database.
+
+The credentials for this one are:
+
+```bash
+System: PostgreSQL
+Server: db
+Username: your-env-db-username
+Password: your-env-db-password
+Database: your-env-db-databse
+```
+
 ## Quick Start
 
 ```bash
