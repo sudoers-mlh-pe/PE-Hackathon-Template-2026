@@ -102,6 +102,9 @@ jobs:
       - name: Set up Python
         run: uv sync --locked --all-extras --dev
 
+      - name: Write CA cert
+        run: echo "${{ secrets.CA_CERT }}" > ./ca-certificate.crt
+
       - name: Run tests
         env:
           DATABASE_HOST: ${{ secrets.DATABASE_HOST }}
@@ -109,6 +112,7 @@ jobs:
           DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
           DATABASE_USER: ${{ secrets.DATABASE_USER }}
           DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
+          DATABASE_CERT_PATH: ./ca-certificate.crt
         run: uv run pytest --cov-report=term-missing --cov-fail-under=50
 
   deploy:
