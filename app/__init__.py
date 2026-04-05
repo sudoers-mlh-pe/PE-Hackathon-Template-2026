@@ -11,9 +11,12 @@ def create_app():
     app = Flask(__name__)
 
     init_db(app)
-
+    
     from app import models  # noqa: F401 - registers models with Peewee
+    from app.database import db
+    from app.models.url import URL
 
+    db.create_tables([URL], safe=True)
     register_routes(app)
 
     @app.route("/health")
