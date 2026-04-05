@@ -103,7 +103,7 @@ jobs:
         run: uv sync --locked --all-extras --dev
 
       - name: Run tests
-        run: uv run pytest -x
+        run: uv run pytest
 
   deploy:
     name: Deploy
