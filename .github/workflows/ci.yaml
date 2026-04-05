@@ -115,9 +115,9 @@ jobs:
           DATABASE_CERT_PATH: ./ca-certificate.crt
         run: uv run pytest --cov-report=term-missing --cov-fail-under=50
 
-  deploy:
-    name: Deploy
-    runs-on: self-hosted
+  deploy_server_1:
+    name: Deploy server 1
+    runs-on: prd-mlh-pe-web-1
     needs: trivy
     if: github.ref == 'refs/heads/main' && success()
 
@@ -127,6 +127,40 @@ jobs:
 
       - name: Deploy
         run: |
-          echo "Deploying to server..."
+          cd /var/www/app/PE-Hackathon-Template-2026/
+          git stash
+          git switch main
+          git pull origin main
+
+          echo "Deleting compose applications..."
+          docker compose -p mlh-pe-app-1 down
+          docker compose -p mlh-pe-app-2 down
+
+          echo "Deploying to applications..."
+          HOST_PORT=8081 docker compose -p mlh-pe-app-1 up -d --build --force-recreate
+          HOST_PORT=8082 docker compose -p mlh-pe-app-2 up -d --build --force-recreate
+
+  deploy_server_2:
+    name: Deploy server 2
+    runs-on: prd-mlh-pe-web-2
+    needs: trivy
+    if: github.ref == 'refs/heads/main' && success()
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Deploy
+        run: |
+          cd /var/www/app/PE-Hackathon-Template-2026/
+          git stash
+          git switch main
+          git pull origin main
+
+          echo "Deleting compose applications..."
+          docker compose -p mlh-pe-app-1 down
+          docker compose -p mlh-pe-app-2 down
+
+          echo "Deploying to applications..."
           HOST_PORT=8081 docker compose -p mlh-pe-app-1 up -d --build --force-recreate
           HOST_PORT=8082 docker compose -p mlh-pe-app-2 up -d --build --force-recreate
