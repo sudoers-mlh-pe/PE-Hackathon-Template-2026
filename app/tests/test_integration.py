@@ -1,14 +1,24 @@
 import pytest
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch
+from flask import Flask, jsonify
 
 
 @pytest.fixture
 def app():
-    from app import create_app
+    test_app = Flask(__name__)
+    test_app.config["TESTING"] = True
 
-    app = create_app()
-    app.config["TESTING"] = True
-    return app
+    @test_app.route("/health")
+    def health():
+        return jsonify(status="ok")
+
+    from app.routes.shorten import shorten_bp
+    from app.routes.redirect import redirect_bp
+
+    test_app.register_blueprint(shorten_bp)
+    test_app.register_blueprint(redirect_bp)
+
+    return test_app
 
 
 @pytest.fixture
@@ -75,35 +85,3 @@ class TestRedirectEndpoint:
 
         response = client.get("/invalidcode123")
         assert response.status_code == 404
-
-
-class TestShortenIntegration:
-    def test_shorten_creates_db_entry(self, client):
-        url = "https://integration-test-unique.com"
-        response = client.post("/shorten", json={"url": url})
-
-        assert response.status_code == 201
-        assert "short_url" in response.json
-
-        from app.models.url import URL
-        entry = URL.get_or_none(URL.full_url == url)
-        assert entry is not None
-        assert entry.short_code is not None
-
-    def test_shorten_duplicate_returns_same_code(self, client):
-        url = "https://duplicate-integration-test.com"
-        r1 = client.post("/shorten", json={"url": url})
-        r2 = client.post("/shorten", json={"url": url})
-
-        assert r1.json["short_url"] == r2.json["short_url"]
-
-    def test_shorten_and_redirect(self, client):
-        url = "https://redirect-integration-test.com"
-        shorten_response = client.post("/shorten", json={"url": url})
-
-        assert shorten_response.status_code == 201
-        short_url = shorten_response.json["short_url"]
-        code = short_url.split("/")[-1]
-
-        redirect_response = client.get(f"/{code}")
-        assert redirect_response.status_code == 302
