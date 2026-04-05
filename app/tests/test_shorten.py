@@ -20,7 +20,7 @@ def test_shorten_invalid_url(mock_redis, client):
     """Test providing a junk URL returns 400."""
     response = client.post('/shorten', json={'url': 'not-a-url'})
     
-    assert response.status_code == 200
+    assert response.status_code == 400
     assert response.json['error'] == "invalid URL"
 
 @patch('app.routes.shorten.redis')
