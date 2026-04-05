@@ -3,7 +3,7 @@ from flask import Flask, jsonify
 
 from app.database import init_db
 from app.routes import register_routes
-
+from app.redis import redis
 
 def create_app():
     load_dotenv()
@@ -21,6 +21,14 @@ def create_app():
 
     @app.route("/health")
     def health():
-        return jsonify(status="ok")
+        try:
+            # 1. Check Redis
+            redis.ping()
+            # 2. Check Database (Peewee)
+            db.connect(reuse_if_open=True)
+            return jsonify(status="ok"), 200
+        except Exception as e:
+            app.logger.error(f"Healthcheck failed: {e}")
+            return {"status": "unhealthy", "reason": str(e)}, 500
 
     return app
