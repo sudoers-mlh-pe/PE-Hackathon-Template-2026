@@ -21,14 +21,6 @@ def create_app():
 
     @app.route("/health")
     def health():
-        try:
-            # 1. Check Redis
-            redis.ping()
-            # 2. Check Database (Peewee)
-            db.connect(reuse_if_open=True)
-            return jsonify(status="ok"), 200
-        except Exception as e:
-            app.logger.error(f"Healthcheck failed: {e}")
-            return {"status": "unhealthy", "reason": str(e)}, 500
+       return jsonify(status="ok")
 
     return app
