@@ -33,6 +33,17 @@ You need to work with around the seed files that you can find in [MLH PE Hackath
 | `uv add <package>` | Add a new dependency |
 | `uv remove <package>` | Remove a dependency |
 
+## Docker Basics
+
+If you prefer running PostgreSQL in a Docker container, you can use the following command:
+
+```bash
+cd postgres
+docker compose --env-file ../.env up -d
+```
+
+It has `adminer` for postgres GUI. You can check it out at http://localhost:8080
+
 ## Quick Start
 
 ```bash
